@@ -643,30 +643,34 @@
             // Send the data to the Google Apps Script
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Required for Google Apps Script
+                // Removed `mode: 'no-cors'` here to allow the Content-Type header to be sent
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data)
             }).then(response => {
-                // Since `no-cors` mode is used, we can't inspect the response.
-                // We just assume success for a simple submission.
-                console.log('Form data sent successfully.');
+                // Now we can actually check the response status
+                if (response.ok) {
+                    console.log('Form data sent successfully.');
+                    // Display the confirmation modal
+                    const modal = document.getElementById('submissionModal');
+                    modal.style.display = 'block';
 
-                // Display the confirmation modal
-                const modal = document.getElementById('submissionModal');
-                modal.style.display = 'block';
-
-                // Reset the form after a short delay
-                setTimeout(() => {
-                    form.reset();
+                    // Reset the form after a short delay
+                    setTimeout(() => {
+                        form.reset();
+                        submitBtn.textContent = 'Submit Report';
+                        submitBtn.disabled = false;
+                    }, 500);
+                } else {
+                    console.error('Submission failed with status:', response.status);
+                    // Handle server-side errors here
                     submitBtn.textContent = 'Submit Report';
                     submitBtn.disabled = false;
-                }, 500);
-
+                }
             }).catch(error => {
                 console.error('Error submitting form:', error);
-                // Handle errors here, e.g., show an error message
+                // Handle network errors here
                 submitBtn.textContent = 'Submit Report';
                 submitBtn.disabled = false;
             });
@@ -691,6 +695,3 @@
 </body>
 
 </html>
-
-
-
