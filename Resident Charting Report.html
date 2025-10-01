@@ -68,6 +68,23 @@
             min-height: 12rem;
             resize: none;
         }
+
+        /* Spinner for loading state */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 
@@ -84,7 +101,8 @@
                     clip-rule="evenodd" />
             </svg>
             <h3 class="text-2xl font-semibold text-gray-800">Submission Successful!</h3>
-            <p class="mt-2 text-gray-600">Your report has been submitted successfully.</p>
+            <p class="mt-2 text-gray-600">Your report has been sent. Check the Google Sheet for new data.</p>
+            <button onclick="hideModal()" class="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">Close</button>
         </div>
     </div>
 
@@ -287,158 +305,170 @@
                                 <span class="ml-2">No</span>
                             </label>
                             <div class="mt-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">If yes, location:</label>
-                                <input type="text" name="pain_location"
-                                    class="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Pain Location:</label>
+                                <input type="text" name="pain_location" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm">
                             </div>
                             <div class="mt-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Severity (1-10):</label>
-                                <input type="text" name="pain_severity"
-                                    class="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Pain Severity (1-10):</label>
+                                <input type="number" name="pain_severity" min="1" max="10" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm">
                             </div>
                         </div>
-                        <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Pain/Discomfort:</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Pain:</h3>
                         <textarea name="notes_pain" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
-                            placeholder="Add notes about pain and discomfort here..."></textarea>
+                            placeholder="Add notes about the resident's pain or discomfort here..."></textarea>
                     </div>
 
                     <!-- Skin Condition -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Skin Condition</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Skin Condition <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="skin" value="Skin intact" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Skin intact</span>
+                                <input type="checkbox" name="skin" value="Intact/Healthy" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Intact/Healthy</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="skin" value="Redness/Irritation" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Redness/Irritation</span>
+                                <input type="checkbox" name="skin" value="Red/Irritated" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Red/Irritated</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="skin" value="Dry/Flaky" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Dry/Flaky</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
                                 <input type="checkbox" name="skin" value="Bruising" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Bruising</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="skin" value="Open wounds" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Open wounds</span>
+                                <input type="checkbox" name="skin" value="Cuts/Scratches" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Cuts/Scratches</span>
                             </label>
-                            <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="skin" value="Bedsores" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Bedsores</span>
-                            </label>
-                            <div class="mt-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Area(s) of concern:</label>
-                                <input type="text" name="skin_area"
-                                    class="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
-                            </div>
                         </div>
-                        <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Skin Condition:</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Skin:</h3>
                         <textarea name="notes_skin" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
-                            placeholder="Add notes about skin condition here..."></textarea>
+                            placeholder="Add notes about the resident's skin condition here..."></textarea>
                     </div>
 
                     <!-- Allergies -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Allergies</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Allergies <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="allergies" value="Food" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Food</span>
+                                <input type="checkbox" name="allergies" value="Pollen" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Pollen</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="allergies" value="Pet dander" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Pet dander</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="allergies" value="Dust mites" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Dust mites</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="allergies" value="Latex" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Latex</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="allergies" value="Specific food" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Specific food</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
                                 <input type="checkbox" name="allergies" value="Medication" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Medication</span>
                             </label>
-                            <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="allergies" value="Seasonal Allergies" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Seasonal Allergies</span>
-                            </label>
-                            <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="allergies" value="Environmental Allergies" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Environmental Allergies</span>
-                            </label>
                             <div class="mt-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Others:</label>
-                                <input type="text" id="allergies_others" name="allergies_others"
-                                    class="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Others:</label>
+                                <input type="text" name="allergies_others" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm">
                             </div>
                         </div>
                         <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Allergies:</h3>
                         <textarea name="notes_allergies" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
-                            placeholder="Add notes about allergies here..."></textarea>
+                            placeholder="Add notes about the resident's allergies here..."></textarea>
                     </div>
 
-                    <!-- Pain and Discomfort #2 -->
+                    <!-- Pain and Discomfort 2 -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Pain and Discomfort #2</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Mobility <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="pain_2" value="Normal" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <input type="checkbox" name="mobility_detail" value="Normal" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Normal</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="pain_2" value="Slower" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <input type="checkbox" name="mobility_detail" value="Slower" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Slower</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="pain_2" value="Needs Help" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <input type="checkbox" name="mobility_detail" value="Needs Help" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Needs Help</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="pain_2" value="Unstable" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <input type="checkbox" name="mobility_detail" value="Unstable" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Unstable</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="pain_2" value="Falls Risk" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <input type="checkbox" name="mobility_detail" value="Falls Risk" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Falls Risk</span>
                             </label>
                         </div>
-                        <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Pain/Discomfort #2:</h3>
-                        <textarea name="notes_pain_2" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
-                            placeholder="Add notes about pain and discomfort here..."></textarea>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Mobility Detail:</h3>
+                        <textarea name="notes_mobility_detail" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
+                            placeholder="Add notes about the resident's mobility details here..."></textarea>
                     </div>
 
                     <!-- Eating/Drinking -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Eating/Drinking</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Eating/Drinking <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="eating" value="Normal" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Normal</span>
+                                <input type="checkbox" name="eating" value="Ate well" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Ate well</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="eating" value="Reduced Appetite" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Reduced Appetite</span>
+                                <input type="checkbox" name="eating" value="Drank well" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Drank well</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="eating" value="Not Eating" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Not Eating</span>
+                                <input type="checkbox" name="eating" value="Ate little" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Ate little</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="eating" value="Drank little" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Drank little</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="eating" value="Refused food" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Refused food</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="eating" value="Refused drink" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Refused drink</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="eating" value="Fed by staff" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Fed by staff</span>
                             </label>
                         </div>
                         <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Eating/Drinking:</h3>
                         <textarea name="notes_eating" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
-                            placeholder="Add notes about eating/drinking here..."></textarea>
+                            placeholder="Add notes about the resident's eating and drinking here..."></textarea>
                     </div>
 
                     <!-- Medication Taken -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Medication Taken</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Medication Taken <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="medication" value="Taken" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Taken</span>
+                                <input type="checkbox" name="medication" value="Yes" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Yes</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="medication" value="Not Taken" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Not Taken</span>
+                                <input type="checkbox" name="medication" value="No" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">No</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
                                 <input type="checkbox" name="medication" value="Refused" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Refused</span>
-                            </label>
-                            <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="medication" value="Not Applicable" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Not Applicable</span>
                             </label>
                         </div>
                         <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Medication:</h3>
@@ -448,49 +478,61 @@
 
                     <!-- Toileting/Bathroom Needs -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Toileting/Bathroom Needs</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Toileting/Bathroom Needs <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
                                 <input type="checkbox" name="toileting" value="Independent" class="form-checkbox h-4 w-4 text-blue-600 rounded">
                                 <span class="ml-2">Independent</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="toileting" value="Needed assistance" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Needed assistance</span>
+                                <input type="checkbox" name="toileting" value="Needs assistance" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Needs assistance</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="toileting" value="Accident" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Accident</span>
+                                <input type="checkbox" name="toileting" value="Used commode" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Used commode</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="toileting" value="Not Applicable" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Not Applicable</span>
+                                <input type="checkbox" name="toileting" value="Used urinal" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Used urinal</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="toileting" value="Incontinent of bowel" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Incontinent of bowel</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="toileting" value="Incontinent of bladder" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Incontinent of bladder</span>
                             </label>
                         </div>
                         <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Toileting/Bathroom Needs:</h3>
                         <textarea name="notes_toileting" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
-                            placeholder="Add notes about toileting/bathroom needs here..."></textarea>
+                            placeholder="Add notes about toileting or bathroom needs here..."></textarea>
                     </div>
 
                     <!-- Sleep -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="font-bold text-lg text-gray-800 mb-4">Sleep</h3>
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">Sleep <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
                         <div class="space-y-2 mb-4">
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="sleep" value="Slept well last night" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Slept well last night</span>
+                                <input type="checkbox" name="sleep" value="Slept well" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Slept well</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="sleep" value="Slept poorly/restless" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Slept poorly/restless</span>
+                                <input type="checkbox" name="sleep" value="Woke frequently" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Woke frequently</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="sleep" value="Napped during the day" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Napped during the day</span>
+                                <input type="checkbox" name="sleep" value="Rested well" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Rested well</span>
                             </label>
                             <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" name="sleep" value="Reports difficulty sleeping" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                                <span class="ml-2">Reports difficulty sleeping</span>
+                                <input type="checkbox" name="sleep" value="Slept little" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Slept little</span>
+                            </label>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" name="sleep" value="Had nightmares" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                                <span class="ml-2">Had nightmares</span>
                             </label>
                         </div>
                         <h3 class="font-bold text-lg text-gray-800 mb-2">Notes on Sleep:</h3>
@@ -500,94 +542,59 @@
                 </div>
             </div>
             
-            <!-- Follow-up Actions & Comments Section -->
-            <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm">
-                <h3 class="font-bold text-xl text-gray-800 mb-4">Follow-Up Actions Needed <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="space-y-2">
+            <!-- Follow-Up & Comments Section -->
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm space-y-6">
+                <!-- Follow-Up Actions Section -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-4">Follow-Up Actions Needed <span class="text-sm font-normal text-gray-500">(check all that apply)</span></h3>
+                    <div class="space-y-2 mb-4">
                         <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Refer to nurse" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Refer to nurse</span>
+                            <input type="checkbox" name="followup_actions" value="GP appointment" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                            <span class="ml-2">GP appointment</span>
                         </label>
                         <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Social/emotional follow-up" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Social/emotional follow-up</span>
+                            <input type="checkbox" name="followup_actions" value="Lab work" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                            <span class="ml-2">Lab work</span>
                         </label>
                         <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Encourage hydration or nutrition" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Encourage hydration or nutrition</span>
-                        </label>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Monitor for changes in condition" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Monitor for changes in condition</span>
+                            <input type="checkbox" name="followup_actions" value="Psychiatrist appointment" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                            <span class="ml-2">Psychiatrist appointment</span>
                         </label>
                         <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Reassure resident/provide emotional support" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Reassure resident/provide emotional support</span>
+                            <input type="checkbox" name="followup_actions" value="Specialist appointment" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                            <span class="ml-2">Specialist appointment</span>
                         </label>
                         <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Provide assistance with ADLs (e.g. hygiene, dressing)" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Provide assistance with ADLs (e.g. hygiene, dressing)</span>
-                        </label>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Report for medication review" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Report for medication review</span>
+                            <input type="checkbox" name="followup_actions" value="Hospital appointment" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                            <span class="ml-2">Hospital appointment</span>
                         </label>
                         <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Coordinate with building manager" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Coordinate with building manager</span>
+                            <input type="checkbox" name="followup_actions" value="Other" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                            <span class="ml-2">Other</span>
                         </label>
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Alert emergency services (if urgent)" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Alert emergency services (if urgent)</span>
-                        </label>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Suggest medical appointment/follow-up with doctor" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Suggest medical appointment/follow-up with doctor</span>
-                        </label>
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Communicate concerns to POA or guardian" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Communicate concerns to POA or guardian</span>
-                        </label>
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Check for safety hazards in unit" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Check for safety hazards in unit</span>
-                        </label>
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Monitor for mental health concerns" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Monitor for mental health concerns</span>
-                        </label>
-                        <label class="flex items-center text-sm font-medium text-gray-700">
-                            <input type="checkbox" name="followup_actions" value="Arrange for social worker or counselor visit" class="form-checkbox h-4 w-4 text-blue-600 rounded">
-                            <span class="ml-2">Arrange for social worker or counselor visit</span>
-                        </label>
+                        <div class="mt-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Other (Specify):</label>
+                            <input type="text" name="followup_other" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Resident Comments or Concerns:</h3>
-                    <textarea name="resident_comments" rows="4"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm"></textarea>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Resident Comments or Concerns</h3>
+                    <textarea name="resident_comments" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
+                        placeholder="Add resident's comments or concerns here..."></textarea>
                 </div>
                 <div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">PSW Observations/Concerns:</h3>
-                    <textarea name="psw_observations" rows="4"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-sm"></textarea>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">PSW Observations/Concerns</h3>
+                    <textarea name="psw_observations" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors notes-textarea shadow-sm"
+                        placeholder="Add your own observations and concerns here..."></textarea>
                 </div>
             </div>
 
             <!-- Submit Button -->
-            <div class="flex justify-center mt-8">
-                <button type="submit"
-                    class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <div class="text-center">
+                <button type="submit" id="submitButton"
+                    class="w-full md:w-auto px-10 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg transition-all transform hover:scale-105 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50">
                     Submit Report
                 </button>
             </div>
@@ -595,105 +602,132 @@
     </div>
 
     <script>
-        // Place the Google Apps Script URL here after deployment.
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8LDw2-QwjVrXv-bzUj9OpbsLl7dKlcfvYGBcpUeGnethIpMy4-iENAUHMdEXdWk-4Xw/exec';
-
-        document.getElementById('chartingForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = {};
-
-            // Collect all form data
-            const allergies = [];
-            for (let [key, value] of formData.entries()) {
-                // If the key is 'allergies' or 'allergies_others', we handle it separately
-                if (key === 'allergies') {
-                    allergies.push(value);
-                } else if (key === 'allergies_others') {
-                    if (value.trim() !== '') {
-                        allergies.push('Others: ' + value);
-                    }
-                } else {
-                    // Collect all other form data
-                    if (data[key]) {
-                        if (!Array.isArray(data[key])) {
-                            data[key] = [data[key]];
-                        }
-                        data[key].push(value);
-                    } else {
-                        data[key] = value;
-                    }
-                }
-            }
-            
-            // Add the combined allergies array back to the data object
-            if (allergies.length > 0) {
-                data.allergies = allergies;
-            } else {
-                data.allergies = '';
-            }
-
-            // Show a "submitting" message or spinner
-            const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Submitting...';
-            submitBtn.disabled = true;
-
-            // Send the data to the Google Apps Script
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                // Removed `mode: 'no-cors'` here to allow the Content-Type header to be sent
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            }).then(response => {
-                // Now we can actually check the response status
-                if (response.ok) {
-                    console.log('Form data sent successfully.');
-                    // Display the confirmation modal
-                    const modal = document.getElementById('submissionModal');
-                    modal.style.display = 'block';
-
-                    // Reset the form after a short delay
-                    setTimeout(() => {
-                        form.reset();
-                        submitBtn.textContent = 'Submit Report';
-                        submitBtn.disabled = false;
-                    }, 500);
-                } else {
-                    console.error('Submission failed with status:', response.status);
-                    // Handle server-side errors here
-                    submitBtn.textContent = 'Submit Report';
-                    submitBtn.disabled = false;
-                }
-            }).catch(error => {
-                console.error('Error submitting form:', error);
-                // Handle network errors here
-                submitBtn.textContent = 'Submit Report';
-                submitBtn.disabled = false;
-            });
-        });
-
-        // Get the modal and the close button
+        const form = document.getElementById('chartingForm');
         const modal = document.getElementById('submissionModal');
-        const span = document.getElementsByClassName('close-button')[0];
+        const closeButton = document.querySelector('.close-button');
+        const submitButton = document.getElementById('submitButton');
 
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function () {
+        // *** IMPORTANT: REPLACE THIS PLACEHOLDER WITH YOUR ACTUAL GOOGLE APPS SCRIPT WEB APP URL ***
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; 
+
+        // Function to show the modal
+        function showModal() {
+            modal.style.display = 'block';
+        }
+
+        // Function to hide the modal (made global for button click)
+        function hideModal() {
             modal.style.display = 'none';
         }
 
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function (event) {
+        // Close modal when the user clicks the close button
+        closeButton.addEventListener('click', hideModal);
+
+        // Close modal when the user clicks outside of it
+        window.addEventListener('click', (event) => {
             if (event.target == modal) {
-                modal.style.display = 'none';
+                hideModal();
+            }
+        });
+
+        // Function to set the button to a loading state
+        function setLoading(isLoading) {
+            submitButton.disabled = isLoading;
+            if (isLoading) {
+                submitButton.innerHTML = '<span class="loader"></span>Submitting...';
+                submitButton.classList.remove('hover:bg-blue-700', 'hover:scale-105');
+                submitButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+            } else {
+                submitButton.innerHTML = 'Submit Report';
+                submitButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                submitButton.classList.add('hover:bg-blue-700', 'hover:scale-105');
             }
         }
+
+
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the default form submission
+
+            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzN9W_16WP8gOAYVvJiJtmUu4GFGD16H11b-QZQoZfx66ouTfwHkSshAwoMe9ZED62fMA/exec') {
+                console.error("Submission failed: Please replace the placeholder SCRIPT_URL with your actual deployed Google Apps Script URL.");
+                alert("ERROR: Please replace the placeholder SCRIPT_URL in the script with your actual URL."); // Using alert for critical user error
+                return;
+            }
+
+            const formData = new FormData(form);
+            const data = {};
+
+            // Process all form data into a structured JSON object
+            formData.forEach((value, key) => {
+                const isCheckbox = form.querySelector(`[name="${key}"][type="checkbox"]`);
+                
+                if (isCheckbox) {
+                    // Checkboxes will push multiple values to an array under the same key
+                    if (!data[key]) {
+                        data[key] = [];
+                    }
+                    data[key].push(value);
+                } else if (key.includes('notes_') || key.includes('comments') || key.includes('observations') || key === 'pain_location' || key === 'pain_severity' || key === 'primaryCareGiver' || form.elements[key].type !== 'radio') {
+                    // Collect text inputs and textareas
+                    data[key] = value;
+                } else if (form.elements[key].type === 'radio') {
+                    // Collect radio button value (only the checked one is in formData)
+                    data[key] = value;
+                }
+            });
+
+            // Clean up: Combine "Other" fields into their parent array/value
+            const followupOther = data['followup_other'];
+            if (followupOther && followupOther.trim() !== '') {
+                if (!Array.isArray(data['followup_actions'])) {
+                    data['followup_actions'] = data['followup_actions'] ? [data['followup_actions']] : [];
+                }
+                data['followup_actions'].push(`Other: ${followupOther}`);
+            }
+            delete data['followup_other']; 
+
+            const allergiesOthers = data['allergies_others'];
+            if (allergiesOthers && allergiesOthers.trim() !== '') {
+                if (!Array.isArray(data['allergies'])) {
+                    data['allergies'] = data['allergies'] ? [data['allergies']] : [];
+                }
+                data['allergies'].push(`Others: ${allergiesOthers}`);
+            }
+            delete data['allergies_others'];
+
+            console.log("Submitting Data (as JSON):", data);
+            
+            setLoading(true); // Start loading state
+
+            try {
+                // Perform the actual fetch request to the Apps Script endpoint
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Essential for basic Apps Script communication
+                    cache: 'no-cache',
+                    headers: {
+                        // Send data as JSON. Your Apps Script doGet/doPost function must parse this using JSON.parse(e.postData.contents)
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                
+                // In 'no-cors' mode, we cannot reliably check the response status (it returns opaque).
+                // We assume success if the fetch operation completes without network error.
+                
+                console.log("Data sent. Assuming successful delivery to Apps Script.");
+                showModal();
+                form.reset(); // Clear the form after submission
+            } catch (error) {
+                console.error('Submission failed. Possible network error or script issue:', error);
+                // In a real app, replace this alert with a custom error modal
+                alert('Submission failed. Check the console for details and verify your Apps Script is correctly deployed.');
+            } finally {
+                setLoading(false); // End loading state
+            }
+        });
     </script>
 </body>
 
 </html>
-
-
